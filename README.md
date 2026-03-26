@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🔐 AuthApp — Authentication System (Next.js + Supabase)
 
-## Getting Started
+A full-stack authentication system built with Next.js and Supabase. Users can sign up and log in using their email or Google account, reset their password, and access a protected personal dashboard.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- 🔑 Google OAuth sign-in
+- 📧 Email and password signup and login
+- 🔁 Forgot password and reset flow
+- 🏠 Protected dashboard — only accessible when logged in
+- 🔗 Account linking — Google and email login connect to the same account
+- 🎨 Clean, responsive UI across all pages
+- 🛡️ Environment variable protection via `.env.local`
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Next.js 16 (App Router)
+- **Backend / Auth:** Supabase
+- **Database:** Supabase PostgreSQL
+- **Google Login:** Google Cloud OAuth 2.0
+- **Deployment:** Vercel
+
+---
+
+## 📂 Project Structure
+
+```
+/app
+  /signup           → Create a new account
+  /login            → Sign in page
+  /forgot-password  → Request a password reset
+  /update-password  → Set a new password
+  /dashboard        → Protected user dashboard
+  /auth/callback    → Handles OAuth redirects
+  /api/signout      → Signs the user out
+/lib
+  supabase.js       → Supabase browser client
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Mercy4002/My-auth-app.git
+cd My-auth-app
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up environment variables
+
+Create a `.env.local` file in the root folder and add:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+You can find both values in your Supabase project under **Settings → API**.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔐 Authentication Methods
 
-## Learn More
+- **Google Sign-In** — one click login via Google OAuth
+- **Email and Password** — traditional signup and login with confirmation
+- **Password Reset** — secure reset link sent to your email
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📌 Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `.env.local` is gitignored and never committed
+- Google OAuth requires the correct redirect URLs set in Google Cloud Console
+- Supabase handles all session management and token storage
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌟 Future Improvements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Add username-based login
+- Implement role-based access control
+- Build out a full user profile page
+- Add two-factor authentication (2FA)
+
+---
+
+## 👩‍💻 Author
+
+**Mercy Sharon**  
+[github.com/Mercy4002](https://github.com/Mercy4002)
