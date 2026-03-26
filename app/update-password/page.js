@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { createClient } from '@/lib/Supabase'
+import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export default function UpdatePassword() {
