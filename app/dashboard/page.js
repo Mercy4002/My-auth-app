@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation'
 
 export default async function DashboardPage() {
   const cookieStore = await cookies()
-
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -84,7 +83,7 @@ export default async function DashboardPage() {
           font-size: 18px; font-weight: 600;
           color: var(--ink); letter-spacing: 0.03em;
         }
-        .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
         .nav-badge {
           font-size: 11px; font-weight: 700;
           letter-spacing: 0.10em; text-transform: uppercase;
@@ -93,6 +92,28 @@ export default async function DashboardPage() {
           border: 1.5px solid var(--blue-tint);
           padding: 4px 12px; border-radius: 100px;
         }
+
+        /* Edit profile button in navbar */
+        .nav-profile-btn {
+          display: flex; align-items: center; gap: 7px;
+          padding: 8px 16px;
+          background: transparent;
+          border: 1.5px solid var(--border);
+          border-radius: var(--radius-sm);
+          color: var(--ink-muted);
+          font-family: 'Nunito', sans-serif;
+          font-size: 13px; font-weight: 600;
+          text-decoration: none;
+          transition: border-color 0.2s, color 0.2s, background 0.2s;
+          cursor: pointer;
+        }
+        .nav-profile-btn:hover {
+          border-color: var(--blue-soft);
+          color: var(--blue-deep);
+          background: var(--blue-pale);
+        }
+        .nav-profile-btn svg { width: 15px; height: 15px; }
+
         .nav-avatar {
           width: 36px; height: 36px; border-radius: 50%;
           background: linear-gradient(135deg, var(--blue-deep), var(--blue-soft));
@@ -301,6 +322,7 @@ export default async function DashboardPage() {
           .two-col        { grid-template-columns: 1fr; }
           .signout-card   { flex-direction: column; align-items: flex-start; gap: 16px; }
           .signout-btn    { width: 100%; justify-content: center; }
+          .nav-badge      { display: none; }
         }
       `}</style>
 
@@ -318,6 +340,17 @@ export default async function DashboardPage() {
         </a>
         <div className="nav-right">
           <span className="nav-badge">Test dashboard</span>
+
+          {/* Edit profile button — top right, clean and separate */}
+          <a href="/profile" className="nav-profile-btn">
+            <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <circle cx="7.5" cy="5" r="2.8"/>
+              <path d="M2 14c0-3.038 2.462-5.5 5.5-5.5S13 10.962 13 14"
+                strokeLinecap="round"/>
+            </svg>
+            Edit profile
+          </a>
+
           <div className="nav-avatar">{initial}</div>
         </div>
       </nav>
@@ -377,7 +410,6 @@ export default async function DashboardPage() {
 
         {/* Two col */}
         <div className="two-col">
-          {/* Account details */}
           <div className="info-card">
             <p className="card-heading">
               <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -414,7 +446,6 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          {/* Login methods */}
           <div className="info-card">
             <p className="card-heading">
               <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -456,7 +487,7 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Sign out */}
+        {/* Sign out — standalone, no nested links */}
         <div className="signout-card">
           <div>
             <p className="signout-title">Sign out of your account</p>
