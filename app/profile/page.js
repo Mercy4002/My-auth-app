@@ -110,46 +110,68 @@ export default function ProfilePage() {
     return data.publicUrl
   }
 
-  async function handleSave() {
-    if (!form.full_name.trim()) {
-      setMessage('Full name is required.')
-      setIsSuccess(false)
-      return
-    }
-
-    setSaving(true)
-    setMessage('')
-
-    // Upload photo first if a new one was selected
-    const newAvatarUrl = await uploadPhoto(user.id)
-    if (newAvatarUrl === null && fileInputRef.current?.files?.[0]) {
-      setSaving(false)
-      return // upload failed, stop here
-    }
-
-    const { error } = await supabase
-      .from('profiles')
-      .upsert({
-        id:         user.id,
-        full_name:  form.full_name.trim(),
-        username:   form.username.trim()  || null,
-        bio:        form.bio.trim()       || null,
-        phone:      form.phone.trim()     || null,
-        location:   form.location.trim()  || null,
-        avatar_url: newAvatarUrl || avatarUrl || null,
-      })
-
-    setSaving(false)
-
-    if (error) {
-      setMessage(error.message)
-      setIsSuccess(false)
-    } else {
-      if (newAvatarUrl) setAvatarUrl(newAvatarUrl)
-      setMessage('Profile updated successfully!')
-      setIsSuccess(true)
-    }
+ async function handleSave() {
+  if (!form.full_name.trim()) {
+    setMessage('Full name is required.')
+    setIsSuccess(false)
+    return
   }
+
+  setSaving(true)
+  setMessage('')
+
+  // Upload photo if a new one was selected
+  const newAvatarUrl = await uploadPhoto(user.id)
+  if (newAvatarUrl === null && fileInputRef.current?.files?.[0]) {
+    setSaving(false)
+    return
+  }
+
+  // Save to Supabase
+  const { error } = await supabase
+    .from('profiles')
+    .upsert({
+      id:         user.id,
+      full_name:  form.full_name.trim(),
+      username:   form.username.trim()  || null,
+      bio:        form.bio.trim()       || null,
+      phone:      form.phone.trim()     || null,
+      location:   form.location.trim()  || null,
+      avatar_url: newAvatarUrl || avatarUrl || null,
+    })
+
+  if (error) {
+    setSaving(false)
+    setMessage(error.message)
+    setIsSuccess(false)
+    return
+  }
+
+  // ── Trigger n8n webhook ────────────────────────────
+  try {
+    await fetch('https://sharonmercy.app.n8n.cloud/webhook/profile-update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email:     user.email,
+        full_name: form.full_name.trim(),
+        username:  form.username.trim()  || 'Not set',
+        phone:     form.phone.trim()     || 'Not set',
+        location:  form.location.trim()  || 'Not set',
+        bio:       form.bio.trim()       || 'Not set',
+      })
+    })
+  } catch (webhookError) {
+    // Webhook errors should never block the user experience
+    console.error('Webhook error:', webhookError)
+  }
+  // ──────────────────────────────────────────────────
+
+  setSaving(false)
+  if (newAvatarUrl) setAvatarUrl(newAvatarUrl)
+  setMessage('Profile updated successfully!')
+  setIsSuccess(true)
+}
 
   const initial    = user?.email?.charAt(0).toUpperCase() ?? '?'
   const photoSrc   = avatarPreview || avatarUrl
