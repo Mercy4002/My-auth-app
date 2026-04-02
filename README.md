@@ -106,5 +106,4 @@ Visit `http://localhost:3000`
 
 ## 👩‍💻 Author
 
-**Mercy Sharon**  
-[github.com/Mercy4002](https://github.com/Mercy4002)
+Mercy Sharon
